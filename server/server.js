@@ -10,7 +10,10 @@ const app = express();
 
 // Enable CORS with specific options
 app.use(cors({
-  origin: true, // Allow all origins
+  origin: [
+    'https://fitness-app-2.onrender.com',
+    'http://localhost:3000'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
@@ -45,7 +48,7 @@ const startServer = (port) => {
   try {
     app.listen(port, () => {
       console.log(`API server running on port ${port}!`);
-      console.log(`Server URL: http://localhost:${port}`);
+      console.log(`Server URL: https://fitness-app-2.onrender.com`);
     });
   } catch (error) {
     if (error.code === 'EADDRINUSE') {

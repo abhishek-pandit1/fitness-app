@@ -1,5 +1,5 @@
 // get logged in user's info 
-const API_URL = 'http://localhost:10000';
+const API_URL = 'https://fitness-app-2.onrender.com';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',

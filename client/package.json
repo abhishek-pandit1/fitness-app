@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
+  "proxy": "https://fitness-app-2.onrender.com",
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -12,12 +12,12 @@
     "client": "file:",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.6.0",
+    "react-bootstrap": "^2.7.2",
     "react-confirm-alert": "^3.0.6",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.5.0",
-    "react-scripts": "^5.0.1",
+    "react-router-dom": "^6.8.1",
+    "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

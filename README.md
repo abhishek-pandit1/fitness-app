@@ -48,14 +48,14 @@ fitness-tracker/
 ### Prerequisites
 
 - Node.js (v14 or higher)
-- MongoDB
+- MongoDB Atlas account
 - npm or yarn
 
 ### Installation
 
 1. Clone the repository
 ```bash
-git clone github.com/abhishek-pandit1/fitness-app
+git clone https://github.com/yourusername/fitness-app.git
 cd fitness-tracker
 ```
 
@@ -74,14 +74,16 @@ npm install
 
 Create a `.env` file in the server directory:
 ```
-PORT=3001
-MONGODB_URI=your_mongodb_uri
+PORT=10000
+MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+NODE_ENV=development
+CLIENT_URL=https://fitness-app-2.onrender.com
 ```
 
 Create a `.env` file in the client directory:
 ```
-REACT_APP_API_URL=http://localhost:3001
+REACT_APP_API_URL=https://fitness-app-2.onrender.com
 ```
 
 4. Start the application
@@ -93,6 +95,10 @@ npm start
 # Start the client (from client directory)
 npm start
 ```
+
+The application will be available at:
+- Frontend: https://fitness-app-2.onrender.com
+- Backend API: https://fitness-app-2.onrender.com/api
 
 ## API Endpoints
 
@@ -123,8 +129,6 @@ The application can be deployed on platforms like:
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-
 
 ## Contact
 
