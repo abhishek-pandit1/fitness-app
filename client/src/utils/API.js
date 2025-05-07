@@ -123,3 +123,14 @@ export const deleteResistance = (resistanceId, token) => {
     }
   });
 };
+
+export const updateUser = async (token, userData) => {
+  return fetchWithErrorHandling('/api/user/update', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(userData),
+  });
+};

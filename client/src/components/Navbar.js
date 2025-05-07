@@ -93,7 +93,20 @@ const AppNavbar = () => {
                       onClick={() => setExpanded(false)}
                     >
                       <span className="nav-link-inner">
-                        Exercise History
+                        History
+                      </span>
+                    </Nav.Link>
+                  </Nav.Item>
+                  
+                  <Nav.Item>
+                    <Nav.Link 
+                      as={Link} 
+                      to="/profile" 
+                      className={location.pathname === '/profile' ? 'active' : ''}
+                      onClick={() => setExpanded(false)}
+                    >
+                      <span className="nav-link-inner">
+                        Profile
                       </span>
                     </Nav.Link>
                   </Nav.Item>

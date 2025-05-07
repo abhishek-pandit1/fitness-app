@@ -1382,3 +1382,191 @@ code {
     padding-top: var(--nav-height);
   }
 }
+
+.welcome-message {
+  animation: fadeInUp 0.5s ease-out;
+  margin-bottom: 2rem;
+  padding: 1rem 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.welcome-message h2 {
+  color: var(--main-color);
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .welcome-message {
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .welcome-message h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* -------------------------------- 10. Profile Page -------------------------------- */
+.profile-page {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  padding: 20px 0 60px 0;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.profile-card .card-header {
+  background: linear-gradient(135deg, #6c5ce7 0%, #a8a4e6 100%);
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+
+.profile-card .card-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.profile-card .card-body {
+  padding: 30px;
+}
+
+.profile-info {
+  margin-bottom: 40px;
+}
+
+.profile-info h3 {
+  color: #2d3436;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.info-group {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.info-group label {
+  font-weight: 600;
+  color: #2d3436;
+  width: 120px;
+  margin-right: 20px;
+}
+
+.info-group span {
+  color: #636e72;
+}
+
+.password-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 30px;
+}
+
+.password-section h3 {
+  color: #2d3436;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.password-form .form-group {
+  margin-bottom: 20px;
+}
+
+.password-form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2d3436;
+  font-weight: 500;
+}
+
+.password-form .form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.password-form .form-control:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+  outline: none;
+}
+
+.update-password-btn {
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.update-password-btn:hover {
+  background: #5b4bc4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(108, 92, 231, 0.2);
+}
+
+.error-message {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.success-message {
+  background-color: #00b894;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  color: #2d3436;
+  font-size: 1.2rem;
+  padding: 40px;
+}
+
+@media (max-width: 768px) {
+  .profile-card .card-body {
+    padding: 20px;
+  }
+
+  .info-group {
+    flex-direction: column;
+  }
+
+  .info-group label {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}

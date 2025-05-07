@@ -14,6 +14,7 @@ import SingleExercise from "./components/SingleExercise"
 import Cardio from "./components/Cardio";
 import Resistance from "./components/Resistance";
 import AIWorkout from "./pages/AIWorkout";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/exercise/cardio" element={<Cardio />} />
         <Route path="/exercise/resistance" element={<Resistance />} />
         <Route path="/ai-workout" element={<AIWorkout />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router >

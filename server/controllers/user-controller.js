@@ -139,4 +139,46 @@ module.exports = {
       });
     }
   },
+
+  // update user password
+  async updateUser({ user, body }, res) {
+    try {
+      if (!user) {
+        return res.status(400).json({ message: "You need to be logged in!" });
+      }
+
+      const { currentPassword, newPassword } = body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: "Current password and new password are required" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: "New password must be at least 6 characters long" });
+      }
+
+      const foundUser = await User.findById(user._id);
+
+      if (!foundUser) {
+        return res.status(400).json({ message: "User not found" });
+      }
+
+      const correctPw = await foundUser.isCorrectPassword(currentPassword);
+
+      if (!correctPw) {
+        return res.status(400).json({ message: "Current password is incorrect" });
+      }
+
+      foundUser.password = newPassword;
+      await foundUser.save();
+
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      res.status(500).json({ 
+        message: "Error updating password",
+        error: error.message 
+      });
+    }
+  }
 };
