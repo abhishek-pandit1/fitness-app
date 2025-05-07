@@ -1,15 +1,19 @@
 // get logged in user's info 
-const API_URL = 'https://fitness-app-backend-si9o.onrender.com';
+const API_URL = 'https://fitness-app-backend-si9o.onrender.com/api';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
-  'Origin': 'https://fitness-app-frontend-y8bk.onrender.com'
+  'Accept': 'application/json'
 };
 
 const fetchWithErrorHandling = async (url, options = {}) => {
   const fullUrl = `${API_URL}${url}`;
   console.log('Making request to:', fullUrl);
+  console.log('Request options:', {
+    method: options.method || 'GET',
+    headers: options.headers,
+    body: options.body ? JSON.parse(options.body) : undefined
+  });
   
   try {
     const response = await fetch(fullUrl, {
@@ -22,15 +26,23 @@ const fetchWithErrorHandling = async (url, options = {}) => {
       credentials: 'include'
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+    const data = await response.json().catch(() => ({ message: 'Failed to parse response' }));
+    console.log('Response data:', data);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(data.message || `HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-    console.log('Response:', data);
     return data;
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('API Error:', {
+      message: error.message,
+      url: fullUrl,
+      status: error.status
+    });
     throw error;
   }
 };

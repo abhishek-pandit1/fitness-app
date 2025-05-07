@@ -29,13 +29,31 @@ module.exports = {
 
       // Validate required fields
       if (!body.username || !body.email || !body.password) {
-        console.log('Missing required fields:', {
-          username: !body.username,
-          email: !body.email,
-          password: !body.password
-        });
+        const missingFields = [];
+        if (!body.username) missingFields.push('username');
+        if (!body.email) missingFields.push('email');
+        if (!body.password) missingFields.push('password');
+        
+        console.log('Missing required fields:', missingFields);
         return res.status(400).json({ 
-          message: "All fields are required" 
+          message: `Missing required fields: ${missingFields.join(', ')}` 
+        });
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email)) {
+        console.log('Invalid email format:', body.email);
+        return res.status(400).json({ 
+          message: "Invalid email format" 
+        });
+      }
+
+      // Validate password length
+      if (body.password.length < 6) {
+        console.log('Password too short');
+        return res.status(400).json({ 
+          message: "Password must be at least 6 characters long" 
         });
       }
 
@@ -46,12 +64,13 @@ module.exports = {
       });
 
       if (existingUser) {
-        console.log('User already exists:', {
+        const field = existingUser.username === body.username ? 'username' : 'email';
+        console.log(`User already exists with this ${field}:`, {
           username: existingUser.username,
           email: existingUser.email
         });
         return res.status(400).json({ 
-          message: "User already exists with this username or email" 
+          message: `User already exists with this ${field}` 
         });
       }
 
@@ -60,7 +79,7 @@ module.exports = {
 
       if (!user) {
         console.log('Failed to create user - no user object returned');
-        return res.status(400).json({ message: "Something is wrong!" });
+        return res.status(400).json({ message: "Failed to create user" });
       }
 
       console.log('User created successfully:', {
@@ -75,8 +94,17 @@ module.exports = {
       console.error('Error creating user:', {
         name: error.name,
         message: error.message,
-        code: error.code
+        code: error.code,
+        stack: error.stack
       });
+      
+      // Handle specific MongoDB errors
+      if (error.code === 11000) {
+        return res.status(400).json({ 
+          message: "Username or email already exists" 
+        });
+      }
+      
       res.status(500).json({ 
         message: "Error creating user",
         error: error.message 

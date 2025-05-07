@@ -4,7 +4,6 @@ import { createUser } from "../utils/API";
 import Auth from "../utils/auth";
 import Header from "../components/Header";
 
-
 export default function Signup() {
   const loggedIn = Auth.loggedIn();
 
@@ -32,24 +31,20 @@ export default function Signup() {
   // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setShowAlert(false);
+    setErrorMessage("");
 
     // use try/catch to handle errors
     try {
-      // create new users
-      const response = await createUser(formState);
-      const data = await response.json();
-
-      // check the response
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong!");
-      }
-
+      // create new user
+      const data = await createUser(formState);
+      
       // use authentication functionality
       Auth.login(data.token);
-
+      
     } catch (err) {
       console.error(err);
-      setErrorMessage(err.message);
+      setErrorMessage(err.message || "Something went wrong!");
       setShowAlert(true);
     }
   };
@@ -70,8 +65,9 @@ export default function Signup() {
           value={formState.username}
           placeholder="Your username"
           name="username"
-          type="username"
+          type="text"
           onChange={handleChange}
+          required
         />
 
         {/* --------------------email-------------------- */}
@@ -83,6 +79,7 @@ export default function Signup() {
           name="email"
           type="email"
           onChange={handleChange}
+          required
         />
 
         {/* -------------------- password-------------------- */}
@@ -94,6 +91,8 @@ export default function Signup() {
           name="password"
           type="password"
           onChange={handleChange}
+          required
+          minLength="6"
         />
 
         {/* --------------------sign up btn-------------------- */}
@@ -101,6 +100,7 @@ export default function Signup() {
           <button 
             disabled={!(formState.username && formState.email && formState.password)}
             className="signup-btn mx-auto my-auto"
+            type="submit"
           >
             Sign Up
           </button>
