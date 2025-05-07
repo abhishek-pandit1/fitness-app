@@ -1,5 +1,5 @@
 // get logged in user's info 
-const API_URL = 'https://fitness-app-backend-si9o.onrender.com/api';
+const API_URL = 'https://fitness-app-backend-si9o.onrender.com';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
