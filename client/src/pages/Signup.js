@@ -8,7 +8,7 @@ import Header from "../components/Header";
 export default function Signup() {
   const loggedIn = Auth.loggedIn();
 
-  // set up the orginal state of the form
+  // set up the original state of the form
   const [formState, setFormState] = useState({
     username: "",
     email: "",
@@ -17,6 +17,7 @@ export default function Signup() {
 
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // update state based on form input
   const handleChange = (event) => {
@@ -36,20 +37,19 @@ export default function Signup() {
     try {
       // create new users
       const response = await createUser(formState);
+      const data = await response.json();
 
       // check the response
       if (!response.ok) {
-        throw new Error("something went wrong!");
+        throw new Error(data.message || "Something went wrong!");
       }
 
-      // get token and user data from server
-      const { token } = await response.json();
-      // use authenticaiton functionality
-      Auth.login(token);
-
+      // use authentication functionality
+      Auth.login(data.token);
 
     } catch (err) {
       console.error(err);
+      setErrorMessage(err.message);
       setShowAlert(true);
     }
   };
@@ -60,7 +60,6 @@ export default function Signup() {
   }
 
   return (
-
     <div className="signup d-flex flex-column align-items-center justify-content-center text-center">
       <Header />
       <form onSubmit={handleFormSubmit} className="signup-form d-flex flex-column">
@@ -99,9 +98,12 @@ export default function Signup() {
 
         {/* --------------------sign up btn-------------------- */}
         <div className="btn-div">
-          <button disabled={!(formState.username && formState.email && formState.password)}
+          <button 
+            disabled={!(formState.username && formState.email && formState.password)}
             className="signup-btn mx-auto my-auto"
-          >Sign Up</button>
+          >
+            Sign Up
+          </button>
         </div>
 
         {/* --------------------login link-------------------- */}
@@ -109,7 +111,7 @@ export default function Signup() {
           Already have an account?{' '}
           <Link to="/login">Log in</Link>
         </p>
-        {showAlert && <div className="err-message">Signup failed</div>}
+        {showAlert && <div className="err-message">{errorMessage}</div>}
       </form>
     </div>
   );

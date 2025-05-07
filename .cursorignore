@@ -1,0 +1,9 @@
+# Allow .env files to be edited
+!.env
+!server/.env
+!client/.env
+
+# Ignore other files
+node_modules/
+.git/
+*.log
