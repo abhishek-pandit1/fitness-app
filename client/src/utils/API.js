@@ -78,7 +78,7 @@ export const createCardio = (cardioData, token) => {
   return fetchWithErrorHandling('/api/exercise/cardio', {
     method: "POST",
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(cardioData)
   });
@@ -88,24 +88,26 @@ export const createResistance = (resistanceData, token) => {
   return fetchWithErrorHandling('/api/exercise/resistance', {
     method: "POST",
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(resistanceData)
   });
 };
 
 export const getCardioById = (cardioId, token) => {
+  console.log('Fetching cardio exercise:', cardioId);
   return fetchWithErrorHandling(`/api/exercise/cardio/${cardioId}`, {
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     }
   });
 };
 
 export const getResistanceById = (resistanceId, token) => {
+  console.log('Fetching resistance exercise:', resistanceId);
   return fetchWithErrorHandling(`/api/exercise/resistance/${resistanceId}`, {
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     }
   });
 };
@@ -114,7 +116,7 @@ export const deleteCardio = (cardioId, token) => {
   return fetchWithErrorHandling(`/api/exercise/cardio/${cardioId}`, {
     method: "DELETE",
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     }
   });
 };
@@ -123,7 +125,7 @@ export const deleteResistance = (resistanceId, token) => {
   return fetchWithErrorHandling(`/api/exercise/resistance/${resistanceId}`, {
     method: "DELETE",
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     }
   });
 };
@@ -133,7 +135,7 @@ export const updateUser = async (token, userData) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(userData),
   });

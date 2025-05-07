@@ -70,6 +70,9 @@ export default function Header() {
                 <Nav.Link as={Link} to="/ai-workout" className="nav-item" active={location.pathname === '/ai-workout'}>
                   <span className="nav-link-inner">AI Workout</span>
                 </Nav.Link>
+                <Nav.Link as={Link} to="/profile" className="nav-item" active={location.pathname === '/profile'}>
+                  <span className="nav-link-inner">Profile</span>
+                </Nav.Link>
                 <Nav.Link onClick={Auth.logout} className="nav-item logout-link">
                   <span className="nav-link-inner">Logout</span>
                 </Nav.Link>
