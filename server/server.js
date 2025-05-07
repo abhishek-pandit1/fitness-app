@@ -40,7 +40,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Test route
+// Test routes
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Server is running!" });
+});
+
 app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "API is working!" });
 });

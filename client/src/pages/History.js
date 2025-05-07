@@ -9,56 +9,65 @@ import resistanceIcon from "../assets/images/resistance.png"
 
 export default function History() {
   const [userData, setUserData] = useState({});
-  const [exerciseData, setExerciseData] = useState([])
+  const [exerciseData, setExerciseData] = useState([]);
   const [displayedItems, setDisplayedItems] = useState(6);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const loggedIn = Auth.loggedIn();
   let currentDate;
 
-  // everytime loggedIn/userdata changes, the getuserdata runs
+  // everytime loggedIn changes, fetch user data
   useEffect(() => {
     const getUserData = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         //get token
         const token = loggedIn ? Auth.getToken() : null;
         if (!token) return false;
 
-        const response = await getMe(token)
-
-        if (!response.ok) {
-          throw new Error("something went wrong!")
-        }
-
-        const user = await response.json()
+        const user = await getMe(token);
+        console.log('User data:', user);
 
         // combine cardio and resistance data together
-        if (user.cardio && user.resistance) {
-          const cardio = user.cardio;
-          const resistance = user.resistance;
-          const exercise = cardio.concat(resistance);
+        if (user.cardio || user.resistance) {
+          const cardio = user.cardio || [];
+          const resistance = user.resistance || [];
+          const exercise = [...cardio, ...resistance];
 
           // sort exercise data by date
           exercise.sort((a, b) => {
-            return new Date(b.date) - new Date(a.date)
-          })
+            return new Date(b.date) - new Date(a.date);
+          });
 
           //format date in exercise data
           exercise.forEach(item => {
-            item.date = formatDate(item.date)
+            item.date = formatDate(item.date);
           });
 
           setUserData(user);
-          setExerciseData(exercise)
+          setExerciseData(exercise);
+        } else {
+          setExerciseData([]);
         }
-      } catch (err) { console.error(err) }
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError(err.message || 'Failed to fetch exercise history');
+      } finally {
+        setLoading(false);
+      }
     };
-    getUserData();
-  }, [loggedIn, userData])
+
+    if (loggedIn) {
+      getUserData();
+    }
+  }, [loggedIn]);
 
   function showMoreItems() {
     setDisplayedItems(displayedItems + 6);
   }
-
 
   // If the user is not logged in, redirect to the login page
   if (!loggedIn) {
@@ -70,8 +79,12 @@ export default function History() {
       <Header />
       <div className="d-flex flex-column align-items-center">
         <h2 className='title'>History</h2>
-        {exerciseData.length ?
-          (<div className='history-data'>
+        {loading ? (
+          <div>Loading...</div>
+        ) : error ? (
+          <div className="err-message">{error}</div>
+        ) : exerciseData.length ? (
+          <div className='history-data'>
             {/* map the exercise data  */}
             {exerciseData.slice(0, displayedItems).map((exercise) => {
               let dateToDisplay;

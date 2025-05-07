@@ -7,6 +7,7 @@ import Header from "../components/Header";
 export default function Login() {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [showAlert, setShowAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const loggedIn = Auth.loggedIn();
 
@@ -23,21 +24,15 @@ export default function Login() {
   // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    setShowAlert(false);
+    setErrorMessage("");
 
-    // check the response
     try {
-      const response = await loginUser(formState);
-
-      if (!response.ok) {
-        throw new Error("something went wrong");
-      }
-
-      // use authentication function
-      const { token, user } = await response.json();
-      Auth.login(token);
-      console.log(user);
+      const data = await loginUser(formState);
+      Auth.login(data.token);
     } catch (err) {
       console.error(err);
+      setErrorMessage(err.message || "Login failed");
       setShowAlert(true);
     }
 
@@ -66,6 +61,7 @@ export default function Login() {
           name="email"
           type="email"
           onChange={handleChange}
+          required
         />
 
         {/* -------------------- password-------------------- */}
@@ -77,19 +73,25 @@ export default function Login() {
           name="password"
           type="password"
           onChange={handleChange}
+          required
         />
 
         {/* --------------------login btn-------------------- */}
         <div className="btn-div">
-          <button disabled={!(formState.email && formState.password)}
-            className="signup-btn mx-auto my-auto">Login</button>
+          <button 
+            disabled={!(formState.email && formState.password)}
+            className="signup-btn mx-auto my-auto"
+            type="submit"
+          >
+            Login
+          </button>
         </div>
         {/* --------------------signup link-------------------- */}
         <p className="link-btn">
           New to FitTrack?{' '}
-          <Link to="/signup" >Create one</Link>
+          <Link to="/signup">Create one</Link>
         </p>
-        {showAlert && <div className="err-message">Login failed</div>}
+        {showAlert && <div className="err-message">{errorMessage}</div>}
       </form>
     </div>
   );
