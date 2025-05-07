@@ -16,13 +16,19 @@ export default function Profile() {
   });
 
   const loggedIn = Auth.loggedIn();
+  console.log('Profile component - loggedIn status:', loggedIn);
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (loggedIn) {
         try {
+          console.log('Fetching user data...');
           const token = Auth.getToken();
+          console.log('Token exists:', !!token);
+          
           const user = await getMe(token);
+          console.log('User data received:', user);
+          
           setUserData(user);
         } catch (err) {
           console.error('Error fetching user data:', err);
@@ -31,6 +37,7 @@ export default function Profile() {
           setLoading(false);
         }
       } else {
+        console.log('User not logged in, skipping data fetch');
         setLoading(false);
       }
     };
@@ -82,6 +89,7 @@ export default function Profile() {
   };
 
   if (!loggedIn) {
+    console.log('User not logged in, redirecting to login');
     return <Navigate to="/login" />;
   }
 
@@ -91,6 +99,17 @@ export default function Profile() {
         <Header />
         <div className="container mt-5 pt-4">
           <div className="loading">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="profile-page">
+        <Header />
+        <div className="container mt-5 pt-4">
+          <div className="error-message">{error}</div>
         </div>
       </div>
     );
@@ -114,11 +133,11 @@ export default function Profile() {
                   <h3>Account Information</h3>
                   <div className="info-group">
                     <label>Username:</label>
-                    <span>{userData?.username}</span>
+                    <span>{userData?.username || 'Loading...'}</span>
                   </div>
                   <div className="info-group">
                     <label>Email:</label>
-                    <span>{userData?.email}</span>
+                    <span>{userData?.email || 'Loading...'}</span>
                   </div>
                 </div>
 

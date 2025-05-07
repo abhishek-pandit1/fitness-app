@@ -48,9 +48,13 @@ const fetchWithErrorHandling = async (url, options = {}) => {
 };
 
 export const getMe = (token) => {
+  console.log('Fetching user data with token:', token ? 'Token exists' : 'No token');
+  if (!token) {
+    throw new Error('No token provided');
+  }
   return fetchWithErrorHandling('/api/user/me', {
     headers: {
-      authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 };
