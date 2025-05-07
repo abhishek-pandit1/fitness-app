@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://fitness-app-2.onrender.com",
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.5",

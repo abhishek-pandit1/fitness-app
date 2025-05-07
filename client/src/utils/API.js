@@ -9,6 +9,13 @@ const defaultHeaders = {
 const fetchWithErrorHandling = async (url, options = {}) => {
   const fullUrl = `${API_URL}${url}`;
   console.log('Making request to:', fullUrl);
+  console.log('Request options:', {
+    ...options,
+    headers: {
+      ...defaultHeaders,
+      ...options.headers,
+    }
+  });
   
   try {
     const response = await fetch(fullUrl, {
@@ -22,6 +29,7 @@ const fetchWithErrorHandling = async (url, options = {}) => {
     });
 
     console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred' }));
@@ -29,7 +37,9 @@ const fetchWithErrorHandling = async (url, options = {}) => {
       throw new Error(errorData.message || 'Something went wrong');
     }
 
-    return response;
+    const data = await response.json();
+    console.log('Response data:', data);
+    return data;
   } catch (error) {
     console.error('Fetch Error:', error);
     throw error;
