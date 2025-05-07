@@ -1,47 +1,36 @@
 // get logged in user's info 
-const API_URL = 'https://fitness-app-2.onrender.com';
+const API_URL = 'https://fitness-app-backend-si9o.onrender.com';
 
 const defaultHeaders = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
+  'Origin': 'https://fitness-app-frontend-y8bk.onrender.com'
 };
 
 const fetchWithErrorHandling = async (url, options = {}) => {
   const fullUrl = `${API_URL}${url}`;
   console.log('Making request to:', fullUrl);
-  console.log('Request options:', {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    }
-  });
   
   try {
     const response = await fetch(fullUrl, {
       ...options,
-      mode: 'cors',
-      credentials: 'include',
       headers: {
         ...defaultHeaders,
         ...options.headers,
       },
+      mode: 'cors',
+      credentials: 'include'
     });
 
-    console.log('Response status:', response.status);
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-    
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: 'Unknown error occurred' }));
-      console.error('API Error:', errorData);
-      throw new Error(errorData.message || 'Something went wrong');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('Response data:', data);
+    console.log('Response:', data);
     return data;
   } catch (error) {
-    console.error('Fetch Error:', error);
+    console.error('API Error:', error);
     throw error;
   }
 };

@@ -5,65 +5,83 @@ const routes = require("./routes");
 const db = require("./config/connection");
 const cors = require("cors");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
+const BACKEND_URL = 'https://fitness-app-backend-si9o.onrender.com';
+const FRONTEND_URL = 'https://fitness-app-frontend-y8bk.onrender.com';
 const app = express();
 
-// Enable CORS with specific options
-app.use(cors({
-  origin: true, // Allow all origins in development
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
-}));
-
-// Add request logging with more details
+// Security headers middleware
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  console.log('Headers:', req.headers);
+  res.setHeader(
+    'Content-Security-Policy',
+    `default-src 'self' ${BACKEND_URL} ${FRONTEND_URL}; connect-src 'self' ${BACKEND_URL} ${FRONTEND_URL}; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';`
+  );
+  res.setHeader('Access-Control-Allow-Origin', FRONTEND_URL);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).json({ message: 'Internal server error', error: err.message });
+// Basic middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Enable CORS
+app.use(cors({
+  origin: FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
 });
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Test route
+app.get("/api/test", (req, res) => {
+  res.status(200).json({ message: "API is working!" });
+});
 
-// Use API routes first
+// API routes
 app.use("/api", routes);
 
-// Serve up static assets in production
+// Serve static files in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
   
-  // Handle React routing in production
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
   });
 }
 
-// Function to start server
-const startServer = (port) => {
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!", error: err.message });
+});
+
+// Start server
+const startServer = async () => {
   try {
-    app.listen(port, () => {
-      console.log(`API server running on port ${port}!`);
-      console.log(`Server URL: https://fitness-app-2.onrender.com`);
+    // Wait for database connection
+    await new Promise((resolve, reject) => {
+      db.once("open", resolve);
+      db.on("error", reject);
+    });
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);
-      console.log(`CORS enabled for all origins`);
+      console.log(`Backend URL: ${BACKEND_URL}`);
+      console.log(`Frontend URL: ${FRONTEND_URL}`);
     });
   } catch (error) {
-    if (error.code === 'EADDRINUSE') {
-      console.log(`Port ${port} is busy, trying ${port + 1}...`);
-      startServer(port + 1);
-    } else {
-      console.error('Error starting server:', error);
-    }
+    console.error("Failed to start server:", error);
+    process.exit(1);
   }
 };
 
-db.once("open", () => {
-  startServer(PORT);
-});
+startServer();
